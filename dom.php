@@ -95,8 +95,18 @@
 
 
             // Get Color
-            $data_color = end($data_tag);
-            #$data_tag = array_slice($data_tag, 0, -1);
+            foreach ($data_tag as $color) {
+
+              // Push array
+              print_r($color);
+              echo "<hr>";
+
+            }
+            #$data_color = end($data_tag);
+
+              // Display
+              #echo "Color: $data_color";
+              #$data_tag = array_slice($data_tag, 0, -1);
 
 
 
@@ -106,6 +116,8 @@
 
                 // Push array
                 array_push($data_price, $price->nodeValue);
+
+                // Display
                 #echo "Price: $price->nodeValue <br />";
 
             }
@@ -116,7 +128,9 @@
             foreach ($articles as $article) {
 
                 // Push array
-                array_push($data_$article, $$article->nodeValue);
+                array_push($data_article, $article->nodeValue);
+
+                // Display
                 #echo "Article Number: $article->nodeValue <br />";
 
             }
@@ -128,11 +142,14 @@
 
                 // Get Detail again
                 $text = explode('.', $detail->nodeValue);
+
                 // Push array
+                array_push($data_detail, $text[0]);
+
+                // Display
                 #echo "Detail: $text[0] <br />";
+
             }
-            // Get Color
-            #echo "Color: $data_color <br />";
 
 
             // Get dimensions
@@ -140,9 +157,15 @@
             foreach ($metrics as $metric) {
                 $metric = $metric->nodeValue;
                 $metric = explode("cm", $metric);
+
+
+
+                // Display
+                /*
                 echo "Metric: ";
                 print_r($metric);
                 echo "<br />";
+                */
             }
 
             // Desginer
@@ -155,6 +178,9 @@
         print_r($data_image);
         print_r($data_name);
         print_r($data_tag);
+        print_r($data_color);
+        print_r($data_price);
+        print_r($data_detail);
         echo "</pre>";
     }
     function getByClass($dom, $class1, $class2 = NULL) {
