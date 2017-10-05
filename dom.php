@@ -95,13 +95,6 @@
 
 
             // Get Color
-            foreach ($data_tag as $color) {
-
-              // Push array
-              print_r($color);
-              echo "<hr>";
-
-            }
             #$data_color = end($data_tag);
 
               // Display
@@ -154,11 +147,16 @@
 
             // Get dimensions
             $metrics = $finder2->query("//div[@id='metric']");
+            $in_metric = array();
             foreach ($metrics as $metric) {
+
+                // Push array
                 $metric = $metric->nodeValue;
                 $metric = explode("cm", $metric);
-
-
+                foreach ($metric as $value) {
+                    array_push($in_metric, $value);
+                }
+                array_push($data_metric, $in_metric);
 
                 // Display
                 /*
@@ -171,16 +169,25 @@
             // Desginer
             $desgins = $finder2->query("//div[@id='designer']");
             foreach ($desgins as $desgin) {
-                echo "Desginer: $desgin->nodeValue <br /><hr />";
+
+                // Arry push
+                array_push($data_desgin, $desgin->nodeValue);
+
+
+                // Display
+                #echo "Desginer: $desgin->nodeValue <br /><hr />";
             }
         }
         echo "<pre>";
         print_r($data_image);
         print_r($data_name);
         print_r($data_tag);
-        print_r($data_color);
+        #print_r($data_color);
         print_r($data_price);
+        print_r($data_article);
         print_r($data_detail);
+        print_r($data_metric);
+        print_r($data_desgin);
         echo "</pre>";
     }
     function getByClass($dom, $class1, $class2 = NULL) {
