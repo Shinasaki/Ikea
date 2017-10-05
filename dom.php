@@ -178,6 +178,9 @@
                 #echo "Desginer: $desgin->nodeValue <br /><hr />";
             }
         }
+
+        // Display Overall
+        /*
         echo "<pre>";
         print_r($data_image);
         print_r($data_name);
@@ -189,6 +192,102 @@
         print_r($data_metric);
         print_r($data_desgin);
         echo "</pre>";
+        */
+
+        // Create group array
+        for ($i=0; $i < count($data_name) ; $i++) {
+            $data[$i] = array(
+                $data_name[$i] = array(
+                    "image" => $data_image[$i],
+                    "name" => $data_name[$i],
+                    "tags" => $data_tag[$i],
+                    "price" => $data_price[$i],
+                    "article" => $data_article[$i],
+                    "detail" => $data_detail[$i],
+                    "metrics" => $data_metric[$i],
+                    "desgin" => $data_desgin[$i]
+                )
+            );
+        }
+
+        // Map array
+        $data = array_map('current', $data);
+
+        // Display
+        echo "<pre>";
+        #print_r($data);
+        echo "</pre>";
+
+
+
+
+
+        // Connect sql
+        $conn = mysqli_connect('localhost', 'root', '', 'ikea');
+        // Insert to sql
+        foreach ($data as $current_data) {
+            $image = $current_data['image'];
+            $name = $current_data['name'];
+
+            $tag1 = $current_data['tags'][0];
+            if (isset($current_data['tags'][1])) {
+                $tag2 = $current_data['tags'][1];
+            } else {
+                $tag2 = NULL;
+            }
+            if (isset($current_data['taGs'][2])) {
+                $tag3 = $current_data['tags'][3];
+            } else {
+                $tag3 = NULL;
+            }
+
+            $price = $current_data['price'];
+            $article = $current_data['article'];
+            $detail = $current_data['detail'];
+
+            $metric1 = $current_data['metrics'][0];
+            if (isset($current_data['metrics'][1])) {
+                $metric2 = $current_data['metrics'][1];
+            } else {
+                $metric2 = NULL;
+            }
+            if (isset($current_data['metrics'][2])) {
+                $metric3 = $current_data['metrics'][2];
+            } else {
+                $metric3 = NULL;
+            }
+
+            $desgin = $current_data['desgin'];
+
+            $name = clearSpace($conn, $name);
+            $detail = clearSpace($conn, $detail);
+            $price = clearSpace($conn, $price);
+            $tag1 = clearSpace($conn, $tag1);
+            $tag2 = clearSpace($conn, $tag2);
+            $tag3 = clearSpace($conn, $tag3);
+            $metric1 = clearSpace($conn, $metric1);
+            $metric2 = clearSpace($conn, $metric2);
+            $metric3 = clearSpace($conn, $metric3);
+
+            echo "Image: <img src='$image' width='120px' height='150px'> <br>";
+            echo "Name: $name <br>";
+            echo "Tags: $tag1 / $tag2 / $tag3 <br>";
+            echo "Price: $price <br>";
+            echo "Article: $article <br>";
+            echo "Detail : $detail <br>";
+            echo "Metrics: $metric1 / $metric2 / $metric3 <br>";
+            echo "Desgin: $desgin <br><hr>";
+
+            // Check exit
+            $query = mysqli_query($conn, "select * from products where article = '$article'") or die(mysqli_error($conn));
+            if (!mysqli_fetch_assoc($query)) {
+            $query = mysqli_query($conn, "
+                insert into products (image, name, price, article, detail, desgin, tag1, tag2, tag3, metric1, metric2, metric3)
+                values ('$image', '$name', '$price', '$article', '$detail', '$desgin', '$tag1', '$tag2', '$tag3', '$metric1', '$metric2', '$metric3')") or die(mysqli_error($conn));
+            }
+        }
+
+
     }
     function getByClass($dom, $class1, $class2 = NULL) {
         /* Return Element was select by classname */
@@ -201,5 +300,9 @@
         }
 
     }
+
+     function clearSpace($conn, $text) {
+        return mysqli_real_escape_string($conn, str_replace(",", "", trim($text)));
+     }
 
 ?>
