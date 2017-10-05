@@ -1,5 +1,5 @@
 <?php
-
+    ini_set('max_execution_time', 300);
     # Check has POST
     if (!isset($_POST['url'])) {
         header('location:index.php');
@@ -217,6 +217,7 @@
         echo "<pre>";
         #print_r($data);
         echo "</pre>";
+        echo "<hr>";
 
 
 
